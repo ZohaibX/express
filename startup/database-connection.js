@@ -1,14 +1,15 @@
-const mongoose = require("mongoose");
-const logger = require("../log/logger")
+const mongoose = require('mongoose');
+const logger = require('../log/logger');
+require('dotenv').config(); // to use dotenv file
 
 module.exports = async function () {
   try {
-    await mongoose.connect("mongodb://localhost/newVidly_tests", {
+    await mongoose.connect(process.env.DATABASE, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    logger.info("connected to database")
+    logger.info('connected to database');
   } catch (error) {
-    logger.error("error in database connection: " , error);
+    logger.error('error in database connection: ', error);
   }
 };

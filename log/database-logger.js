@@ -1,16 +1,17 @@
-const Winston = require("winston");
-require("winston-mongodb");
+const Winston = require('winston');
+require('winston-mongodb');
+require('dotenv').config(); // to use dotenv file
 
 const winston = Winston.createLogger({
   levels: Winston.config.syslog.levels,
   transports: [
     new Winston.transports.MongoDB(
       {
-        db: "mongodb://localhost/newVidly_tests",
+        db: process.env.DATABASE,
       },
       {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
       }
     ),
   ],
