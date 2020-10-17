@@ -3,7 +3,10 @@ const {
   getAssignedStudentsToTask,
   getTaskIdsByUser,
   assignTaskToUser,
+  getCurrentUserData,
 } = require('./helper-functions');
+const mongoose = require('mongoose');
+const { validateTaskInput } = require('./validation-functions');
 
 module.exports = {
   getAllTasks: async (args, req) => {
@@ -45,9 +48,13 @@ module.exports = {
   },
 
   createTask: async (args, req) => {
+    const error = validateTaskInput(args.taskData);
+    if (error) throw new Error(error);
+
     const task = new Task({
       title: args.taskData.title,
       students: args.taskData.students,
+      user: mongoose.Types.ObjectId(req.userId),
     });
 
     try {
@@ -59,7 +66,8 @@ module.exports = {
         ...result._doc,
         _id: result.id,
         createdDate: new Date(result._doc.createdDate).toISOString(),
-        students: getAssignedStudentsToTask(task._doc.students),
+        students: getAssignedStudentsToTask(result._doc.students),
+        user: getCurrentUserData(result._doc.user),
       };
     } catch (e) {
       throw e;

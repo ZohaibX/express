@@ -8,6 +8,7 @@ type Task {
   title : String!
   createdDate : String!
   students: [Student]
+  user: Auth
 }
 type Student {
   _id: ID! 
@@ -21,7 +22,7 @@ type Auth {
   token: String!
   expiresIn: String!
   tasks: [Task]!
-  students: [Student]! 
+  students: [Student]!
 }
 
 input TaskData {

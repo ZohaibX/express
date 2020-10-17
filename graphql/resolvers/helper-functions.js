@@ -1,6 +1,7 @@
 const Task = require('../models/task');
 const Student = require('../models/student');
 const Auth = require('../models/auth');
+const Image = require('../../upload-by-multer/image-upload.model');
 
 const getAssignedTasksToStudent = async (taskIds) => {
   const tasks = await Task.find({
@@ -96,6 +97,18 @@ const getTaskIdsByUser = async (userId) => {
   return user.tasks;
 };
 
+const getCurrentUserData = async (userId) => {
+  const user = await Auth.findOne({ _id: userId });
+  if (!user) throw new Error('Unauthorized');
+
+  return {
+    ...user._doc,
+    _id: user.id,
+    students: getAssignedStudentsToUser(user._doc.students),
+    tasks: getAssignedTasksToUser(user._doc.tasks),
+  };
+};
+
 module.exports.getAssignedStudentsToTask = getAssignedStudentsToTask;
 module.exports.getAssignedTasksToStudent = getAssignedTasksToStudent;
 module.exports.getAssignedStudentsToUser = getAssignedStudentsToUser;
@@ -105,3 +118,5 @@ module.exports.assignStudentToUser = assignStudentToUser;
 module.exports.assignTaskToUser = assignTaskToUser;
 module.exports.getStudentIdsByUser = getStudentIdsByUser;
 module.exports.getTaskIdsByUser = getTaskIdsByUser;
+
+module.exports.getCurrentUserData = getCurrentUserData;

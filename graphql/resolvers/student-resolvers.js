@@ -1,10 +1,10 @@
 const Student = require('../models/student');
-const Auth = require('../models/auth');
 const {
   getAssignedTasksToStudent,
   assignStudentToUser,
   getStudentIdsByUser,
 } = require('./helper-functions');
+const { validateStudentInput } = require('./validation-functions');
 
 module.exports = {
   getStudents: async (args, req) => {
@@ -42,7 +42,9 @@ module.exports = {
   },
 
   createStudent: async (args, req) => {
-    console.log(req.userId);
+    const error = validateStudentInput(args.studentData);
+    if (error) throw new Error(error);
+
     const { name, status, batchID, dptID, roll_no } = args.studentData;
     if (
       status !== 'JUNIOR' &&

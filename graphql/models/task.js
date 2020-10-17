@@ -17,6 +17,10 @@ const taskSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Auth',
+    },
   },
   { timestamps: true } // now it will have created at and updatedAt field
 );

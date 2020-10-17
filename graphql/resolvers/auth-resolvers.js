@@ -6,9 +6,14 @@ const {
   getAssignedStudentsToUser,
   getAssignedTasksToUser,
 } = require('./helper-functions');
+const { validateAuthInput } = require('./validation-functions');
 
 module.exports = {
   signUp: async (args, req) => {
+    const error = validateAuthInput(args.authInput);
+    console.log(error);
+    if (error) throw new Error(error);
+
     const { username, email, authLevel, password } = args.authInput;
     const transformedAuthLevel = authLevel.toUpperCase();
 

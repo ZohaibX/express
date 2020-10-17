@@ -40,6 +40,20 @@ const authSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    images: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image',
+        default: [],
+      },
+    ],
+    pdfs: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PDF',
+        default: [],
+      },
+    ],
   },
   { timestamps: true } // now it will have created at and updatedAt field
 );
