@@ -13,6 +13,7 @@ const PDFDocument = require('pdfkit'); // for generating pdf's
 
 // ! Getting All URLs
 router.get('/', async (req, res) => {
+  //? Here we could do that, when creating images, we could store userId in that image model, so we may retrieve images of a userId in a single query
   if (!req.userId) throw new Error('Unauthorized User');
 
   // getting user's assigned images only
@@ -28,6 +29,8 @@ router.get('/', async (req, res) => {
 });
 // ! Getting All  PDFS
 router.get('/pdf', async (req, res) => {
+  //? Here we could do that, when creating pdfs, we could store userId in that image model, so we may retrieve pdfs of a userId in a single query
+
   if (!req.userId) throw new Error('Unauthorized User');
 
   // getting user's assigned images only
@@ -45,7 +48,7 @@ router.get('/pdf', async (req, res) => {
 // Note .. I can apply Auth in the routes .. so logged in users can post something or retrieve something
 // we can have a userId from the frontend and then we can retrieve information of the user and his pdf files or images .
 
-//! uploading single image -- its configuration in startup folder -> routes
+//! uploading single image or single pdf -- its configuration in startup folder -> routes
 router.post('/', async (req, res) => {
   console.log(req.userId);
   if (!req.userId) throw new Error('Unauthorized User');
@@ -96,29 +99,8 @@ router.post('/', async (req, res) => {
 
 //!                    Downloading images or files (pdf invoices) specifically for the users
 
-//? now its about invoices -- showing the already existing pdf that we can upload for the users .
-// ? which means we have to create a invoice folder in the public and then name that file as here
-
-// we are using specific image Id here to name the picture
-// but in some cases .. we may name it with some id .. which would be associated to different users
-
-// this method will create a downloading method or opening pdf directly method
-// we can apply auth here -- for logged in users
-// for this method, we need to upload a pdf first already
 router.get('/pdf-show/:name', async (req, res) => {
-  //! whatever id is coming from request is actually userId, bcoz thats what we have saved when generating the pdf
-  // const pdfId = req.params.id;
-  // // here im using image id.
-  // // we can have a user id and auth here -- so we can serve authenticated or logged in users
-
-  // const invoiceName = 'invoice-generated-' + pdfId + '.pdf';
-  // //! change this name according to the existing pdf
-  // //   this is how pdf should be named in the invoices folder
-  // const invoicePath = path.join('public', 'invoices', invoiceName);
-  // console.log(invoicePath);
-  // create invoices folder in public files
-  // invoice path becomes public/invoices/invoiceName --
-  //which is the actual address where invoice is located at .. (actual address of invoice -- in this vsCode File)
+  // we are receiving name of the pdf, which is stored in db, so we may go to that image
   console.log(req.params.name);
   const invoicePath = path.join('public', 'uploads', req.params.name);
   const file = fs.createReadStream(invoicePath); //  fs will read the path and file
@@ -145,12 +127,6 @@ router.get('/pdf-show/:name', async (req, res) => {
 //                                            ! Generate PDF's
 
 //? This will be generated at the spot and it may take time in generation due to connection and it will be stored in the invoices folder
-
-// we are using specific image Id here to name the picture
-// but in some cases .. we may name it with some id .. which would be associated to different users
-
-// this method will create a downloading method or opening pdf directly method
-// we can apply auth here -- for logged in users
 
 router.get('/pdf-generate/:token', async (req, res) => {
   // we are not accessing this request using axios but href tag, we can't send headers with that,
