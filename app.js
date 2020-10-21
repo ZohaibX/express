@@ -14,6 +14,9 @@ require('./startup/validation')();
 require('./startup/production')(app);
 require('dotenv').config(); //? to use dotenv file
 
+// Redis
+require('./services/cache');
+
 const logger = require('./log/logger');
 
 const morgan = require('morgan');

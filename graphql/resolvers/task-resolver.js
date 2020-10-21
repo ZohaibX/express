@@ -7,21 +7,16 @@ const {
 } = require('./helper-functions');
 const mongoose = require('mongoose');
 const { validateTaskInput } = require('./validation-functions');
+const { clearHash } = require('../../services/cache');
 
 module.exports = {
   getAllTasks: async (args, req) => {
-    const taskIds = await getTaskIdsByUser(req.userId);
-    // taskIds property we will get from user
+    if (!req.userId) throw new Error('Unauthorized User');
 
     const tasks = await Task.find({
-      _id: {
-        $in: taskIds,
-      },
-    });
+      user: req.userId,
+    }).cache({ key: req.userId });
 
-    // Its a simple returning function
-    // to change every data id
-    // here we used map fn to change id of each data
     return tasks.map((task) => ({
       ...task._doc,
       _id: task.id,
@@ -62,6 +57,7 @@ module.exports = {
 
       // assigning this student to the auth user
       assignTaskToUser(req.userId, result.id);
+      clearHash(req.userId);
       return {
         ...result._doc,
         _id: result.id,
@@ -89,6 +85,8 @@ module.exports = {
     );
     if (!task) throw new Error("Task couldn't be found");
 
+    clearHash(req.userId);
+
     return {
       ...task._doc,
       _id: task.id,
@@ -106,6 +104,7 @@ module.exports = {
     if (!userSavedTask) throw new Error('Task Not Found');
     const task = await Task.findByIdAndDelete(args.id);
     if (!task) throw new Error("Task couldn't be found");
+    clearHash(req.userId);
     return {
       ...task._doc,
       _id: task.id,

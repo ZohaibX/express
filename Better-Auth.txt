@@ -1,0 +1,23 @@
+I have implemented like a user model will have all task Ids in it 
+so whenever i have to get Tasks , 
+i will have to find user first , from req.userId 
+and then i will have to find tasks, from the taskIds, came from user 
+
+so i should do something like , 
+whenever creating a task, i can add a property init as userId: req.userId
+so i can get the tasks as 
+Task.find({userId: req.userId})
+
+-- with a single Query
+
+
+
+
+
+NEXT TIME I HAVE TO DO LIKE THIS ,
+STORE USERID IN EVERY TASK OR STUDENT 
+AND THEN FIND THEM AS TASK.find({ USERID: req.userId}) 
+WITH A SINGLE QUERY
+
+
+SEE THE DIFFERENCE BTW GETSTUDENTS QUERY AND GETALLTASKS QUERY, WE WILL FOLLW GETALLTASKS QUERY STYLE 
