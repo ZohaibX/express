@@ -50,7 +50,6 @@ router.get('/pdf', async (req, res) => {
 
 //! uploading single image or single pdf -- its configuration in startup folder -> routes
 router.post('/', async (req, res) => {
-  console.log(req.userId);
   if (!req.userId) throw new Error('Unauthorized User');
 
   const file = req.file;
@@ -101,7 +100,6 @@ router.post('/', async (req, res) => {
 
 router.get('/pdf-show/:name', async (req, res) => {
   // we are receiving name of the pdf, which is stored in db, so we may go to that image
-  console.log(req.params.name);
   const invoicePath = path.join('public', 'uploads', req.params.name);
   const file = fs.createReadStream(invoicePath); //  fs will read the path and file
 
@@ -131,7 +129,6 @@ router.get('/pdf-show/:name', async (req, res) => {
 router.get('/pdf-generate/:token', async (req, res) => {
   // we are not accessing this request using axios but href tag, we can't send headers with that,
   // so i sent token filhaal, to access user's data
-  console.log(req.params.token);
   let decodedToken;
   try {
     decodedToken = jwt.verify(req.params.token, 'secret');

@@ -1,0 +1,7 @@
+File is in services folder / cache.js
+logic is , we will apply caching only in queries 
+and in all mutaions, we will delete the cache data .
+so next time, we will get updated data after mutation 
+
+
+applied in task resolvers 

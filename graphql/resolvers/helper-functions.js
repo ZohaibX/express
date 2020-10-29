@@ -83,7 +83,6 @@ const assignTaskToUser = async (userId, taskId) => {
   try {
     await user.save();
   } catch (e) {
-    console.log(e);
     throw new Error(e.message);
   }
 };

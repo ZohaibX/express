@@ -3,41 +3,51 @@
     "version": "1.0.0",
     "description": "",
     "main": "app.js",
+    "jest": {
+        "testEnvironment": "node",
+        "preset": "@shelf/jest-mongodb"
+    },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "NODE_ENV=development nodemon app.js"
+        "test": "jest --detectOpenHandles --watchAll --verbose",
+        "start": "node app.js",
+        "dev": "NODE_ENV=development nodemon app.js"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "assert": "^2.0.0",
+        "aws-sdk": "^2.776.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",
         "compression": "^1.7.4",
         "confiq": "0.0.3",
+        "cookie-session": "^1.4.0",
         "debug": "^4.1.1",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "express-graphql": "^0.11.0",
         "flat": "^5.0.2",
         "helmet": "^3.23.3",
+        "jest": "^26.6.0",
         "joi": "^17.1.1",
         "joi-objectid": "^3.0.1",
         "jsonwebtoken": "^8.5.1",
         "mongodb": "^3.6.0",
+        "mongodb-memory-server": "^6.9.2",
         "mongoose": "^5.9.22",
         "morgan": "^1.10.0",
         "multer": "^1.4.2",
         "passport": "^0.4.1",
         "passport-google-oauth20": "^2.0.0",
         "pdfkit": "^0.11.0",
+        "puppeteer": "^5.3.1",
         "redis": "^3.0.2",
         "winston": "^3.3.3",
         "winston-mongodb": "^5.0.1"
     },
     "devDependencies": {
+        "@shelf/jest-mongodb": "^1.2.3",
         "cors": "^2.8.5",
-        "graphql": "^15.3.0",
-        "nodemon": "^2.0.4"
+        "graphql": "^15.3.0"
     }
 }

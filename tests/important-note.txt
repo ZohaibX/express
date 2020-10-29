@@ -1,0 +1,16 @@
+To test async functions. we need to test them as 
+await expect().resolves.not.toBeNull() 
+like this 
+
+we must connect our test methods to database 
+thats how we will be able to test resolver functions .. 
+when we are connected to database already
+
+
+always Remember jest.fn()
+                jest.fn().mockResolvedValue(value)
+                jest.fn().mockReturnedValue(value)
+// one example is in authMiddleware Test
+// and second example is in nestjs-postgres-rest // repo from github 
+
+// many jest things are in that repo // i can get help from there

@@ -9,7 +9,7 @@ module.exports = async function () {
       useUnifiedTopology: true,
       useFindAndModify: false,
     });
-    logger.info('connected to database');
+    logger.info('connected to local database');
   } catch (error) {
     logger.error('error in database connection: ', error);
   }

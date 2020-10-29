@@ -13,9 +13,15 @@ module.exports = {
   getAllTasks: async (args, req) => {
     if (!req.userId) throw new Error('Unauthorized User');
 
-    const tasks = await Task.find({
-      user: req.userId,
-    }).cache({ key: req.userId });
+    let tasks;
+
+    try {
+      tasks = await Task.find({
+        user: req.userId,
+      }).cache({ key: req.userId });
+    } catch (error) {
+      throw new Error(error);
+    }
 
     return tasks.map((task) => ({
       ...task._doc,
@@ -26,6 +32,8 @@ module.exports = {
   },
 
   getTask: async (args, req) => {
+    //! This method is not good for authorization . we need to do it as GetAllTasks Method
+    if (!req.userId) throw new Error('Unauthorized User');
     const taskIds = await getTaskIdsByUser(req.userId);
 
     const userSavedTask = taskIds.find(
@@ -34,6 +42,7 @@ module.exports = {
     if (!userSavedTask) throw new Error('Task Not Found');
 
     const task = await Task.findById(args.id);
+
     return {
       ...task._doc,
       _id: task.id,
@@ -43,6 +52,9 @@ module.exports = {
   },
 
   createTask: async (args, req) => {
+    //! This method is not good for authorization . we need to do it as GetAllTasks Method
+    if (!req.userId) throw new Error('Unauthorized User');
+
     const error = validateTaskInput(args.taskData);
     if (error) throw new Error(error);
 
@@ -56,8 +68,8 @@ module.exports = {
       const result = await task.save();
 
       // assigning this student to the auth user
-      assignTaskToUser(req.userId, result.id);
-      clearHash(req.userId);
+      assignTaskToUser(req.userId, result.id); //! we don't need to assign this task to user if we follow GetAllTask Method
+      clearHash(req.userId); //! Here we are removing the cache, so we may get updated data
       return {
         ...result._doc,
         _id: result.id,
@@ -71,6 +83,8 @@ module.exports = {
   },
 
   changeTitle: async (args, req) => {
+    //! This method is not good for authorization . we need to do it as GetAllTasks Method
+    if (!req.userId) throw new Error('Unauthorized User');
     const taskIds = await getTaskIdsByUser(req.userId);
 
     const userSavedTask = taskIds.find(
@@ -85,7 +99,7 @@ module.exports = {
     );
     if (!task) throw new Error("Task couldn't be found");
 
-    clearHash(req.userId);
+    clearHash(req.userId); //! Here we are removing the cache, so we may get updated data
 
     return {
       ...task._doc,
@@ -96,6 +110,8 @@ module.exports = {
   },
 
   deleteTask: async (args, req) => {
+    //! This method is not good for authorization . we need to do it as GetAllTasks Method
+    if (!req.userId) throw new Error('Unauthorized User');
     const taskIds = await getTaskIdsByUser(req.userId);
 
     const userSavedTask = taskIds.find(
@@ -104,7 +120,7 @@ module.exports = {
     if (!userSavedTask) throw new Error('Task Not Found');
     const task = await Task.findByIdAndDelete(args.id);
     if (!task) throw new Error("Task couldn't be found");
-    clearHash(req.userId);
+    clearHash(req.userId); //! Here we are removing the cache, so we may get updated data
     return {
       ...task._doc,
       _id: task.id,
